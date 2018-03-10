@@ -1,8 +1,7 @@
-# DB settings
-# src/database.js
-
 # IDE
 .idea
+
+package-lock.json
 
 # Logs
 logs

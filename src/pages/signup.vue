@@ -19,7 +19,6 @@
             <f7-list-item>
                 <f7-button fill raised @click="signup">Sign Up</f7-button>
             </f7-list-item>
-            {{user}}
         </f7-list>
     </f7-page>
 </template>

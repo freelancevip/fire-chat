@@ -74,9 +74,10 @@
         },
         methods: {
             send() {
-                if (!auth.currentUser || text === '') return;
+                if (!auth.currentUser) return;
                 const self = this;
                 const text = self.$f7.messagebar.getValue().replace(/\n/g, '<br>').trim();
+                if (text === '') return;
                 db.ref('messages').push({
                     senderId: this.user.uid,
                     text: text,

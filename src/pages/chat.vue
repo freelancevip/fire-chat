@@ -13,12 +13,13 @@
                         :tail="true"
                         :avatar="message.data.avatar"
                         :name="message.data.name"
-                        :namecolor="'red'"
+                        :name-color="message.data.colorScheme.color"
+                        :background="message.data.colorScheme.background"
+                        :bubble-color="message.data.colorScheme.border"
                         :type="messageClass(message)">
                     <div
                             slot="bubble-start"
-                            v-html="message.text"
-                            v-bind:style="{ color: message.data.colorScheme.color, background: message.data.colorScheme.background, border: '1px solid' + message.data.colorScheme.border }"></div>
+                            v-html="message.text"></div>
                 </my-message>
             </f7-messages>
             <f7-messagebar

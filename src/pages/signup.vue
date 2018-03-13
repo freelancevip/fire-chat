@@ -19,6 +19,7 @@
             <f7-list-item>
                 <f7-button fill raised @click="signup">Sign Up</f7-button>
             </f7-list-item>
+            {{user}}
         </f7-list>
     </f7-page>
 </template>
@@ -89,9 +90,9 @@
                 let self = this;
                 let names;
                 if (gender === 'kun') {
-                    names = this.girls;
-                } else {
                     names = this.boys;
+                } else {
+                    names = this.girls;
                 }
                 let n = faker.random.number({min: 0, max: names.length});
                 return names[n]['.value'];
@@ -124,6 +125,46 @@
                         color: '#FFA0AC',
                         border: '#B4DC7F',
                         background: '#7B886F'
+                    },
+                    {
+                        color: '#388659',
+                        border: '#3AAED8',
+                        background: '#52AA8A'
+                    },
+                    {
+                        color: '#3AAED8',
+                        border: '#2BD9FE',
+                        background: '#3AAED8'
+                    },
+                    {
+                        color: '#322E18',
+                        border: '#B7B5E4',
+                        background: '#847979'
+                    },
+                    {
+                        color: '#243010',
+                        border: '#A1C349',
+                        background: '#87A330'
+                    },
+                    {
+                        color: '#767522',
+                        border: '#DBF4AD',
+                        background: '#CDC776'
+                    },
+                    {
+                        color: '#BC8DA7',
+                        border: '#D9D9D9',
+                        background: '#BDB4BF'
+                    },
+                    {
+                        color: '#993955',
+                        border: '#AE76A6',
+                        background: '#A3C3D9'
+                    },
+                    {
+                        color: '#9D6381',
+                        border: '#CECCCC',
+                        background: '#FDECEF'
                     }
                 ];
                 let n = faker.random.number({min: 0, max: schemes.length - 1});

@@ -6,13 +6,13 @@
              :style="{'background-image': avatar && 'url(' + avatar + ')'}" @click="onAvatarClick"></div>
         <div class="message-content">
             <slot name="content-start"></slot>
-            <div class="message-name" style="{ color: red }" v-if="name || $slots.name" @click="onNameClick">
+            <div class="message-name" :style="{ color: nameColor }" v-if="name || $slots.name" @click="onNameClick">
                 <slot name="name">{{name}}</slot>
             </div>
             <div class="message-header" v-if="header || $slots.header" @click="onHeaderClick">
                 <slot name="header">{{header}}</slot>
             </div>
-            <div class="message-bubble" @click="onBubbleClick">
+            <div class="message-bubble" :style="{'background-color' : background, color: bubbleColor}" @click="onBubbleClick">
                 <slot name="bubble-start"></slot>
                 <div class="message-image" v-if="image || $slots.image">
                     <slot name="image"><img :src="image"></slot>
@@ -38,10 +38,40 @@
     </div>
 </template>
 <script>
+    import Utils from '../../node_modules/framework7-vue/src/utils/utils';
+    import Mixins from '../../node_modules/framework7-vue/src/utils/mixins';
     import message from '../../node_modules/framework7-vue/src/components/message'
 
+    const MessageProps = Utils.extend(
+        {
+            text: String,
+            name: String,
+            nameColor: String, //
+            background: String, //
+            bubbleColor: String, //
+            avatar: String,
+            type: {
+                type: String,
+                default: 'sent',
+            },
+            image: String,
+            header: String,
+            footer: String,
+            textHeader: String,
+            textFooter: String,
+            first: Boolean,
+            last: Boolean,
+            tail: Boolean,
+            sameName: Boolean,
+            sameHeader: Boolean,
+            sameFooter: Boolean,
+            sameAvatar: Boolean,
+        },
+        Mixins.colorProps
+    );
     export default {
-        name: 'myMessage',
+        name: 'my-message',
         extends: message,
+        props: MessageProps,
     };
 </script>

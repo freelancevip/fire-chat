@@ -7,13 +7,19 @@
         </f7-navbar>
         <f7-block strong>
             <f7-messages>
-                <f7-message
+                <my-message
                         v-for="message of messages"
                         :key="message['.key']"
                         :tail="true"
+                        :avatar="message.data.avatar"
+                        :name="message.data.name"
+                        :namecolor="'red'"
                         :type="messageClass(message)">
-                    <div slot="bubble-start" v-html="message.text"></div>
-                </f7-message>
+                    <div
+                            slot="bubble-start"
+                            v-html="message.text"
+                            v-bind:style="{ color: message.data.colorScheme.color, background: message.data.colorScheme.background, border: '1px solid' + message.data.colorScheme.border }"></div>
+                </my-message>
             </f7-messages>
             <f7-messagebar
                     placeholder="Message"
@@ -33,16 +39,37 @@
 
 <script>
     import {db, auth} from '../database'
+    import MyMessage from '../components/my-message'
 
     export default {
         name: 'chat',
+        components: {MyMessage},
         data() {
             return {
-                message: ''
+                message: '',
+                user: {
+                    name: 'Guest',
+                    avatar: ''
+                },
+                chatData: ''
+            }
+        },
+        computed: {
+            a() {
+                return auth.currentUser
             }
         },
         firebase: {
             messages: db.ref('messages').limitToLast(25)
+        },
+        mounted() {
+            let self = this;
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    self.user = auth.currentUser;
+                    self.chatData = JSON.parse(user.photoURL.replace('\"', '"'));
+                }
+            })
         },
         methods: {
             send() {
@@ -50,9 +77,10 @@
                 const self = this;
                 const text = self.$f7.messagebar.getValue().replace(/\n/g, '<br>').trim();
                 db.ref('messages').push({
-                    senderId: auth.currentUser.uid,
+                    senderId: this.user.uid,
                     text: text,
-                    timestamp: +new Date()
+                    timestamp: +new Date(),
+                    data: self.chatData
                 });
                 self.$f7.messagebar.clear();
             },
@@ -63,17 +91,32 @@
                     return 'received'
                 }
             },
-            onF7Ready($f7) {
-                if (auth.currentUser === null) {
-                    $f7.router.navigate('/', {reloadCurrent: true, animate: false});
-                }
-            },
             logout() {
+                let router = this.$router;
                 auth.signOut()
                     .then(() => {
-                        this.$f7router.navigate('/');
+                        router.replace('/');
                     });
             }
         }
     }
 </script>
+
+<style>
+    .message-image img {
+        max-width: 100%;
+    }
+
+    .ios .message-avatar {
+        width: 64px;
+        height: 64px;
+    }
+
+    .message:not(.message-last) .message-avatar {
+        opacity: 1 !important;
+    }
+
+    .message:not(.message-first) .message-name {
+        display: block !important;
+    }
+</style>

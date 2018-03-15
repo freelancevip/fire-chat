@@ -1,6 +1,9 @@
 <template>
     <f7-page>
         <f7-navbar>
+            <f7-nav-left>
+                <f7-link icon="icon-bars" panel-open="left"></f7-link>
+            </f7-nav-left>
             <f7-nav-title>Fire Chat App</f7-nav-title>
         </f7-navbar>
         <f7-list form>
@@ -35,7 +38,8 @@
                     email: '',
                     password: '',
                     avatar: ''
-                }
+                },
+                loggedIn: false
             }
         },
         firebase: {
@@ -49,28 +53,35 @@
                     if (user) {
                         let auser = auth.currentUser;
                         auser.updateProfile({
+                            // TODO: Сменить ключ photoURL на менее необходимый
                             photoURL: JSON.stringify({
                                 avatar: self.user.avatar,
                                 name: self.user.name,
                                 colorScheme: self.user.colorScheme
                             }),
-                        }).then(function () {
-                            self.$router.replace('/chat/')
+                        }).then(() => {
+                            self.$f7router.navigate('/chat/')
                         }).catch(function (error) {
                             console.log(error)
                         });
-
-
                     } else {
                         alert('Error')
                     }
                 });
             },
-            logout() {
-                auth.signOut()
-                    .then(() => {
-                        this.$f7router.navigate('/');
-                    });
+            generateData(gender) {
+                let self = this;
+                if (!this.boys.length || !this.girls.length) {
+                    return;
+                }
+                self.user = {
+                    gender: gender,
+                    avatar: self.getAvatar(gender),
+                    name: self.getName(gender),
+                    email: self.getEmail(),
+                    password: self.getPassword(),
+                    colorScheme: self.getColorScheme()
+                };
             },
             getEmail() {
                 let date = Date.now();
@@ -98,20 +109,6 @@
             },
             getPassword() {
                 return faker.internet.password();
-            },
-            generateData(gender) {
-                let self = this;
-                if (!this.boys.length || !this.girls.length) {
-                    return;
-                }
-                self.user = {
-                    gender: gender,
-                    avatar: self.getAvatar(gender),
-                    name: self.getName(gender),
-                    email: self.getEmail(),
-                    password: self.getPassword(),
-                    colorScheme: self.getColorScheme()
-                };
             },
             getColorScheme() {
                 let schemes = [

@@ -22,6 +22,8 @@ This will download latest version of Framework7, Framework7-Vue, Vue and require
 
 ### 3. Fill firebase settings in src/database.js
 ~~~javascript
+import {default as firebase, initializeApp} from 'firebase'
+
 let config = {
     apiKey: "",
     authDomain: "",
@@ -30,6 +32,11 @@ let config = {
     storageBucket: "",
     messagingSenderId: ""
 };
+
+const app = initializeApp(config);
+
+export const db = app.database();
+export const auth = firebase.auth();
 ~~~
 
 ### 3. Run the app

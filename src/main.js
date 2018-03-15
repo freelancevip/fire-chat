@@ -15,10 +15,10 @@ import IconsStyles from './css/icons.css';
 import AppStyles from './css/app.css';
 
 // Import Routes
-import router from './router'
+import routes from './router'
+import {auth} from './database'
 // Import App Component
 import App from './app';
-import {auth, db} from "./database";
 import VueGoodWizard from 'vue-good-wizard';
 
 // Init F7 Vue Plugin
@@ -28,40 +28,24 @@ Vue.config.productionTip = false;
 Vue.use(VueFire);
 Vue.use(VueGoodWizard);
 
-// const EventBus = new Vue()
-//
-// Object.defineProperties(Vue.prototype, {
-//     $bus: {
-//         get: function () {
-//             return EventBus
-//         }
-//     }
-// })
+// TODO: Add Event bus
 
-window.EventBus = new Vue()
 
-let vm = new Vue({
-    el: '#app',
-    template: '<app/>',
-    framework7: {
-        id: 'io.framework7.testapp',
-        name: 'Framework7',
-        theme: 'ios',
-        // routes: Routes
-    },
-    router,
-    components: {
-        app: App
-    },
-    ready() {
-        // auth.onAuthStateChanged((user) => {
-        //     console.log(user)
-        //     if (user) {
-        //         this.$router.navigate('/chat/');
-        //     } else {
-        //         this.$router.navigate('/');
-        //     }
-        // });
+auth.onAuthStateChanged(() => {
+    if (typeof vm === 'undefined') {
+        let vm = new Vue({
+            el: '#app',
+            template: '<app/>',
+            framework7: {
+                id: 'io.framework7.testapp',
+                name: 'Framework7',
+                theme: 'ios',
+                routes
+            },
+            components: {
+                app: App
+            }
+        });
+        window.vm=vm;
     }
 });
-

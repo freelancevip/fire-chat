@@ -12,7 +12,8 @@
             <div class="message-header" v-if="header || $slots.header" @click="onHeaderClick">
                 <slot name="header">{{header}}</slot>
             </div>
-            <div class="message-bubble" :style="{'background-color' : background, color: bubbleColor}" @click="onBubbleClick">
+            <div class="message-bubble" :style="{'background-color' : background, color: bubbleColor}"
+                 @click="onBubbleClick">
                 <slot name="bubble-start"></slot>
                 <div class="message-image" v-if="image || $slots.image">
                     <slot name="image"><img :src="image"></slot>
@@ -75,3 +76,28 @@
         props: MessageProps,
     };
 </script>
+<style>
+    .message {
+        max-width: 90%;
+    }
+    .message-image img {
+        max-width: 100%;
+    }
+
+    .ios .message-avatar {
+        width: 64px;
+        height: 64px;
+    }
+
+    .message:not(.message-last) .message-avatar {
+        opacity: 1 !important;
+    }
+
+    .message:not(.message-first) .message-name {
+        display: block !important;
+    }
+	.toolbar.messagebar {
+		position: fixed;
+		bottom: 0;
+	}
+</style>

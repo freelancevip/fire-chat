@@ -1,30 +1,34 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Chat from '../pages/chat'
+import PanelRightPage from '../pages/panel-right.vue';
+import ChannelsPage from '../pages/channels';
 import SingUpPage from '../pages/signup'
+import Chat from '../pages/chat'
+import {auth} from '../database'
 
-Vue.use(VueRouter);
-
-let router = new VueRouter({
-    routes: [
-        {
-            path: '/',
-            name: 'register',
-            component: SingUpPage
-        },
-        {
-            path: '/chat',
-            name: 'chat',
-            component: Chat,
-            meta: {
-                requiresAuth: true
+export default [
+    {
+        path: '/',
+        name: 'register',
+        component: SingUpPage,
+        async(routeTo, routeFrom, resolve, reject) {
+            if (auth.currentUser) {
+                resolve({component: Chat})
             }
-        },
-        {
-            path: '/signup',
-            component: SingUpPage
-        },
-    ]
-})
-
-export default router
+        }
+    },
+    {
+        path: '/panel-right/',
+        component: PanelRightPage,
+    },
+    {
+        path: '/channels/',
+        component: ChannelsPage,
+    },
+    {
+        path: '/chat/',
+        component: Chat
+    },
+    {
+        path: '/signup',
+        component: SingUpPage
+    },
+];
